@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Mail, KeyRound, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 import Logo from '../../../public/images/Logo.png'
@@ -7,13 +8,24 @@ import Image from 'next/image';
 export default function TelaLogin() {
     const [passwordVisible, setPasswordVisible] = useState(false)
     const [userTypingPassword, setUserTypingPassword] = useState(false)
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const router = useRouter()
 
     const handlePasswordChange = (e) => {
+        setPassword(e.target.value)
         setUserTypingPassword(e.target.value.length > 0)
     }
 
     const togglePasswordVisibility = () => {
         setPasswordVisible(!passwordVisible)
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        const token = 'faketoken123'
+        localStorage.setItem('token', token)
+        router.push('/logado')
     }
 
     return (
@@ -47,7 +59,7 @@ export default function TelaLogin() {
             </div>
 
             <div className="flex justify-center items-center w-full md:w-1/2">
-                <form className="space-y-4 md:w-1/3" action="#" method="POST">
+                <form className="space-y-4 md:w-1/3" onSubmit={handleSubmit}>
                     <h2 className="mt-10 text-left text-3xl font-bold text-gray-900 dark:text-gray-50">
                         Acessar minha conta.
                     </h2>
@@ -59,6 +71,8 @@ export default function TelaLogin() {
                             placeholder="Email"
                             autoComplete="email"
                             required
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             className="block w-full rounded-xl border-0 py-3 text-gray-900 bg-zinc-100 placeholder:text-gray-400 pl-10"
                         />
                         <Mail size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -72,6 +86,7 @@ export default function TelaLogin() {
                             placeholder="Senha"
                             autoComplete="current-password"
                             required
+                            value={password}
                             onChange={handlePasswordChange}
                             className="block w-full rounded-xl border-0 py-3 text-gray-900 bg-zinc-100 placeholder:text-gray-400 pl-10"
                         />
